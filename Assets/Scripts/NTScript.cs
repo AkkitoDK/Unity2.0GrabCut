@@ -49,9 +49,6 @@ public class NTScript : MonoBehaviour
         int y = middle % 1000;
 
 
-        print(x);
-        print(y);
-
         int radius = 350;
         float rSquared = radius * radius;
 
@@ -60,13 +57,34 @@ public class NTScript : MonoBehaviour
 
         Material materialShader;
 
-        
+        tempColor.a = 0f;
 
         for (int u = x - radius; u < x + radius + 1; u++)
             for (int v = y - radius; v < y + radius + 1; v++)
                 if (((x - u) * (x - u) + (y - v) * (y - v)) * 5.5 > rSquared)
-                    tex.SetPixel(u, v, Color.white);
+                    tex.SetPixel(u, v, tempColor);
 
+
+
+
+       /* Material unlit;
+        unlit = new Material(Shader.Find("Unlit/camshader"));
+        this.GetComponent<Renderer>().material = unlit;
+
+        for (x=0; x < tex.height; x++)
+        {
+            for(y =0; y<tex.width; y++)
+            {
+                if(tex.GetPixel(x,y) == Color.white)
+                {
+                   
+                    tex.SetPixel(x, y, unlit.color);
+                    
+                }
+            }
+        }
+        //this.GetComponent<Renderer>().material = unlit;*/
+       
         tex.Apply();
 
        
