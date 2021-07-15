@@ -17,12 +17,14 @@ public class NTScript : MonoBehaviour
     [DllImport("FancyLibrary", EntryPoint = "Coordinates")]
     private static extern int Coordinates();
 
-    
+    MeshRenderer rend;
+
     void Start()
     {
         Initialize();
         Debug.Log("done");
         m = new Material(Shader.Find("Transparent/Diffuse"));
+        rend = GetComponent<MeshRenderer>();
     }
 
     void Update()
@@ -49,45 +51,72 @@ public class NTScript : MonoBehaviour
         int y = middle % 1000;
 
 
-        int radius = 350;
+        int radius = 330;
         float rSquared = radius * radius;
 
-
+        print(x);
+        
         Color tempColor = m.color;
 
-        Material materialShader;
-
         tempColor.a = 0f;
-
-        for (int u = x - radius; u < x + radius + 1; u++)
-            for (int v = y - radius; v < y + radius + 1; v++)
-                if (((x - u) * (x - u) + (y - v) * (y - v)) * 5.5 > rSquared)
-                    tex.SetPixel(u, v, tempColor);
+        //Material test = (Material)Resources.Load("test", typeof(Material)); ;
 
 
+        m = new Material(Shader.Find("Unlit/camshader"));
+        rend.material.SetTexture("_MainTex", tex);
 
-
-       /* Material unlit;
-        unlit = new Material(Shader.Find("Unlit/camshader"));
-        this.GetComponent<Renderer>().material = unlit;
-
-        for (x=0; x < tex.height; x++)
+        if (x > 140 && x < 500 && y > 140 && y < 340)
         {
-            for(y =0; y<tex.width; y++)
-            {
-                if(tex.GetPixel(x,y) == Color.white)
-                {
-                   
-                    tex.SetPixel(x, y, unlit.color);
-                    
-                }
-            }
-        }
-        //this.GetComponent<Renderer>().material = unlit;*/
-       
-        tex.Apply();
+            for (int u = x - radius; u < x + radius + 1; u++)
+                for (int v = y - radius; v < y + radius + 1; v++)
+                    if (((x - u) * (x - u) + (y - v) * (y - v)) * 5.6 > rSquared)
+                        tex.SetPixel(u, v, Color.white);
 
-       
+        }
+        else
+        {
+            Color[] cols = tex.GetPixels();
+            for (int j = 0; j < cols.Length; j++)
+
+                cols[j] = tempColor;
+            tex.SetPixels(cols);
+        }
+
+
+            //rend.GetMaterials(test.SetTexture("_MainText" , tex));
+            //rend.material.SetTexture("_MainTex", tex);
+
+            /*else
+            {
+                Color[] cols = tex.GetPixels();
+                for (int j = 0; j < cols.Length; j++)
+
+                    cols[j] = tempColor;
+                tex.SetPixels(cols);
+            }*/
+
+
+            /* Material unlit;
+             unlit = new Material(Shader.Find("Unlit/camshader"));
+             this.GetComponent<Renderer>().material = unlit;
+
+             for (x=0; x < tex.height; x++)
+             {
+                 for(y =0; y<tex.width; y++)
+                 {
+                     if(tex.GetPixel(x,y) == Color.white)
+                     {
+
+                         tex.SetPixel(x, y, unlit.color);
+
+                     }
+                 }
+             }
+             //this.GetComponent<Renderer>().material = unlit;*/
+
+            tex.Apply();
+
+        
     }
 
 }
